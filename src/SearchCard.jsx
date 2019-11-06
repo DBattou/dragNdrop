@@ -3,7 +3,7 @@ import { useDrag } from "react-dnd";
 
 const Card = ({ label, id }) => {
   const [{ isDragging }, drag] = useDrag({
-    item: { type: "card", cardFromSearch: true, label, id },
+    item: { type: "card", cardFromSearch: true, label, id, index: '???'},
     collect: monitor => ({
       isDragging: !!monitor.isDragging()
     })

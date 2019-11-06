@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SearchCard from "./SearchCard";
 
 const SearchList = () => {
-  const [cards, setCards] = useState([
+  const [cards] = useState([
     { id: 1, label: "Coucou" },
     { id: 2, label: "Goodbye" },
     { id: 3, label: "Gutentag" },

@@ -21,32 +21,36 @@ const Slider = () => {
 
   const addCard = useCallback(
     (hoverIndex, item) => {
-      // console.log("cardList before : ", cardList);
-      // console.log("item : ", item);
-      // console.log(cardList.find(card => card.id === item.id));
       if (!cardList.find(card => card.id === item.id)) {
         cardList.splice(hoverIndex, 0, item);
         setcardList([...cardList]);
-        return true;
       }
-
-      return false;
     },
     [cardList]
   );
 
-  console.log("cardList before render : ", cardList);
+  const cardAlreadyExists = useCallback(
+    (id) => {
+      if (cardList.find(card => card.id === id)) {
+        return true
+      }
+
+      return false
+    },
+    [cardList]
+  )
 
   return (
     <div style={{ border: "2px solid black", margin: "40px", width: "500px" }}>
       {cardList.map((card, index) => (
         <SortableCard
-          key={card.id}
-          id={card.id}
+          key={card ? card.id : undefined}
+          id={card ? card.id : undefined}
           index={index}
-          label={card.label}
+          label={card ? card.label : ''}
           moveCard={moveCard}
           addCard={addCard}
+          cardAlreadyExists={cardAlreadyExists}
         ></SortableCard>
       ))}
     </div>
