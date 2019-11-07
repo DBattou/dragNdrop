@@ -1,7 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import SortableCard from "./SortableCard";
+import defer from 'lodash.defer'
 
 const Slider = () => {
+  useEffect(() => {
+    // console.log('--------------')
+    defer(()=> console.log('--------------'))
+  })
+
+
   const [cardList, setcardList] = useState([
     { id: 10, label: "Bonjour" },
     { id: 11, label: "Hello" },
@@ -44,10 +51,10 @@ const Slider = () => {
     <div style={{ border: "2px solid black", margin: "40px", width: "500px" }}>
       {cardList.map((card, index) => (
         <SortableCard
-          key={card ? card.id : undefined}
-          id={card ? card.id : undefined}
+          key={card.id}
+          id={card.id}
           index={index}
-          label={card ? card.label : ''}
+          label={card.label}
           moveCard={moveCard}
           addCard={addCard}
           cardAlreadyExists={cardAlreadyExists}

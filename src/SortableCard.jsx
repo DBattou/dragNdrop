@@ -1,7 +1,45 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDrop, useDrag } from "react-dnd";
+import defer from 'lodash.defer'
+import {useTraceUpdate} from './useTraceUpdate'
+import { usePrevious } from "./usePrevious";
 
-const SortableCard = ({ id, index, label, moveCard, addCard, cardAlreadyExists}) => {
+const SortableCard = (props) => {
+  // console.log(props)
+  useTraceUpdate(props)
+
+  const { id, index, label, moveCard, addCard, cardAlreadyExists} = props
+  // const previousProps = usePrevious(props)
+  // useEffect(() => {
+  //   if(previousProps.id !== id){
+  //     console.log('id a changé')
+  //   }
+  //   if(previousProps.index !== index){
+  //     console.log('index a changé')
+  //   }
+  //   if(previousProps.label !== label){
+  //     console.log('label a changé')
+  //   }
+  //   if(previousProps.moveCard !== moveCard){
+  //     console.log('moveCard a changé')
+  //   }
+  //   if(previousProps.addCard !== addCard){
+  //     console.log('addCard a changé')
+  //   }
+  //   if(previousProps.cardAlreadyExists !== cardAlreadyExists){
+  //     console.log('cardAlreadyExists a changé')
+  //   }
+  // }, [id, index, label, moveCard, addCard, cardAlreadyExists])
+
+
+
+  useEffect(() => {
+    if (id === 11) {
+      console.log("je suis 11 et je rerender : ", { id, index, label, moveCard, addCard, cardAlreadyExists})
+    }
+  })
+  // useEffect(() => defer(console.log(`Je suis suis ${id} et je RERENDER`)))
+  
   const ref = useRef(null);
   const [{hovered, item}, drop] = useDrop({
     accept: "card",
@@ -9,6 +47,10 @@ const SortableCard = ({ id, index, label, moveCard, addCard, cardAlreadyExists})
       if (!ref.current) {
         return;
       }
+
+      // if (id ===  11) {
+      //   defer(() => console.log(`hovered dans le la fonction hover`))
+      // }
 
       // If the dragged card is in the slider it has a dragIndex
       // If the card is coming from the search list it doesnt have a dragIndex
@@ -63,10 +105,16 @@ const SortableCard = ({ id, index, label, moveCard, addCard, cardAlreadyExists})
         item.index = hoverIndex;
       }
     },
-    collect: monitor => ({
-      hovered: monitor.isOver(),
-      item: monitor.getItem()
-    }),
+    collect: monitor => {
+      // if (monitor.isOver() && id ===  11) {
+      //   defer(() => console.log(`hovered dans le collecteur`))
+      // }
+
+      return {
+        hovered: monitor.isOver(),
+        item: monitor.getItem()
+      }
+    },
     drop: (item) => {
       if (item.cardFromSearch && cardAlreadyExists(item.id)) {
         alert("Le contenu est déjà présent")
@@ -82,7 +130,20 @@ const SortableCard = ({ id, index, label, moveCard, addCard, cardAlreadyExists})
   });
 
   drop(drag(ref));
+ 
+  // console.log('--------------------------------------------------------------')
+  // console.log(`id : ${id}, isDragging : ${isDragging}, isHovered : ${hovered}`)
+  
+  // if (hovered && id === 11) {
+  //   defer(() => console.log(`Hovered dans la fonciton principale`))
+  // } else if (id === 11) {
+  //   // console.log(`11 is NOT HOVERED`)
+  //   defer(() => console.log(`Not Hovered`))
+  // }
 
+  // console.log(id, ' => Hovered ', hovered ? true : false)
+  
+  
   return (
     <div
       ref={ref}
@@ -94,12 +155,15 @@ const SortableCard = ({ id, index, label, moveCard, addCard, cardAlreadyExists})
         margin: "20px",
         height: "20px",
         width: "100px",
-        opacity: (isDragging || hovered) && (item && !item.cardFromSearch) ? "0" : "1",
+        // opacity: (isDragging || hovered) && (item && !item.cardFromSearch) ? "0" : "1",
+        opacity: isDragging || hovered ? "0" : "1",
       }}
     >
       {label}
     </div>
   );
 };
+
+SortableCard.whyDidYouRender = false;
 
 export default SortableCard;
