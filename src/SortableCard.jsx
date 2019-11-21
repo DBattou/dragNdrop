@@ -6,7 +6,7 @@ import { usePrevious } from "./usePrevious";
 
 const SortableCard = (props) => {
   // console.log(props)
-  useTraceUpdate(props)
+  // useTraceUpdate(props)
 
   const { id, index, label, moveCard, addCard, cardAlreadyExists} = props
   // const previousProps = usePrevious(props)
@@ -33,11 +33,11 @@ const SortableCard = (props) => {
 
 
 
-  useEffect(() => {
-    if (id === 11) {
-      console.log("je suis 11 et je rerender : ", { id, index, label, moveCard, addCard, cardAlreadyExists})
-    }
-  })
+  // useEffect(() => {
+  //   if (id === 11) {
+  //     console.log("je suis 11 et je rerender : ", { id, index, label, moveCard, addCard, cardAlreadyExists})
+  //   }
+  // })
   // useEffect(() => defer(console.log(`Je suis suis ${id} et je RERENDER`)))
   
   const ref = useRef(null);

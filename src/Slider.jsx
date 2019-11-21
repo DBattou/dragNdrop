@@ -3,10 +3,10 @@ import SortableCard from "./SortableCard";
 import defer from 'lodash.defer'
 
 const Slider = () => {
-  useEffect(() => {
-    // console.log('--------------')
-    defer(()=> console.log('--------------'))
-  })
+  // useEffect(() => {
+  //   // console.log('--------------')
+  //   defer(()=> console.log('--------------'))
+  // })
 
 
   const [cardList, setcardList] = useState([
