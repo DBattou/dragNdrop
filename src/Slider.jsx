@@ -1,67 +1,96 @@
-import React, { useState, useCallback, useEffect } from "react";
-import SortableCard from "./SortableCard";
-import defer from 'lodash.defer'
+import React, { useState, useCallback } from 'react'
+import SortableCard from './SortableCard'
+import { useDrop } from 'react-dnd'
+
+const ITEMS = [
+  { id: '10', label: 'Bonjour' },
+  { id: '11', label: 'Hello' },
+  { id: '12', label: 'Hi' },
+  { id: '13', label: 'Sayonara' }
+]
 
 const Slider = () => {
-  // useEffect(() => {
-  //   // console.log('--------------')
-  //   defer(()=> console.log('--------------'))
-  // })
+  const [cards, setcardList] = useState(ITEMS)
 
-
-  const [cardList, setcardList] = useState([
-    { id: 10, label: "Bonjour" },
-    { id: 11, label: "Hello" },
-    { id: 12, label: "Hi" },
-    { id: 13, label: "Sayonara" }
-  ]);
+  const findCard = useCallback(
+    id => {
+      const card = cards.filter(c => `${c.id}` === id)[0]
+      return card
+        ? {
+            card,
+            index: cards.indexOf(card)
+          }
+        : null
+    },
+    [cards]
+  )
 
   const moveCard = useCallback(
-    (dragIndex, hoverIndex) => {
-      const dragCard = cardList[dragIndex];
-      cardList.splice(dragIndex, 1);
-      cardList.splice(hoverIndex, 0, dragCard);
-      setcardList([...cardList]);
-    },
-    [cardList]
-  );
+    (id, atIndex) => {
+      const cardFound = findCard(id)
 
-  const addCard = useCallback(
-    (hoverIndex, item) => {
-      if (!cardList.find(card => card.id === item.id)) {
-        cardList.splice(hoverIndex, 0, item);
-        setcardList([...cardList]);
+      if (cardFound) {
+        const { card, index } = cardFound
+        cards.splice(index, 1)
+        cards.splice(atIndex, 0, card)
+
+        setcardList([...cards])
       }
     },
-    [cardList]
-  );
+    [cards, findCard]
+  )
+
+  const addCard = useCallback(
+    (atIndex, card) => {
+      // if (!cards.find(card => card.id === item.id)) {
+      cards.splice(atIndex, 0, card)
+      setcardList([...cards])
+      // }
+    },
+    [cards]
+  )
+
+  const deleteCard = useCallback(
+    atIndex => {
+      cards.splice(atIndex, 1)
+    },
+    [cards]
+  )
 
   const cardAlreadyExists = useCallback(
-    (id) => {
-      if (cardList.find(card => card.id === id)) {
+    id => {
+      if (cards.find(card => card.id === id)) {
         return true
       }
 
       return false
     },
-    [cardList]
+    [cards]
   )
 
-  return (
-    <div style={{ border: "2px solid black", margin: "40px", width: "500px" }}>
-      {cardList.map((card, index) => (
-        <SortableCard
-          key={card.id}
-          id={card.id}
-          index={index}
-          label={card.label}
-          moveCard={moveCard}
-          addCard={addCard}
-          cardAlreadyExists={cardAlreadyExists}
-        ></SortableCard>
-      ))}
-    </div>
-  );
-};
+  const [, drop] = useDrop({ accept: 'card' })
 
-export default Slider;
+  console.log(cards)
+
+  return (
+    <div ref={drop} style={{ border: '2px solid black', margin: '40px', width: '500px' }}>
+      {cards.map((card, index) => {
+        return (
+          <SortableCard
+            key={card.id}
+            id={card.id}
+            index={index}
+            label={card.label}
+            moveCard={moveCard}
+            addCard={addCard}
+            cardAlreadyExists={cardAlreadyExists}
+            findCard={findCard}
+            deleteCard={deleteCard}
+          ></SortableCard>
+        )
+      })}
+    </div>
+  )
+}
+
+export default Slider
