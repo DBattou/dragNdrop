@@ -45,6 +45,8 @@ const SortableCard = ({
     accept: "card",
     canDrop: () => false,
     hover: cardBeingDragged => {
+      console.log("From search : ", cardBeingDragged.cardFromSearch);
+
       if (cardBeingDragged.cardFromSearch) {
         if (!findCard(cardBeingDragged.id)) {
           const { index: overIndex } = findCard(id);
@@ -52,7 +54,7 @@ const SortableCard = ({
           cardBeingDragged.cardFromSearch = false;
           cardBeingDragged.isStillBeingDragged = true;
 
-          addCard(overIndex, cardBeingDragged);
+          addCard(overIndex, { ...cardBeingDragged, isDragging: true });
           // addFakeCard(overIndex, { id: "-1", isFake: true });
         }
       } else {

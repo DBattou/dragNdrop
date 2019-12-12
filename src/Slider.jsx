@@ -87,24 +87,37 @@ const Slider = () => {
 
   const [{ isOverSlider }, drop] = useDrop({
     accept: "card",
-    collect: monitor => ({
-      isOverSlider: monitor.isOver()
-    })
+    collect: (monitor, item) => {
+      // console.log("item : ", item);
+
+      return {
+        isOverSlider: monitor.isOver()
+      };
+    },
+    drop(item) {
+      const { card, index } = findCard(item.id);
+      cards.splice(index, 1, { ...card, isDragging: false });
+    }
   });
 
   const prevIsover = useRef(false);
 
   useEffect(() => {
     if (prevIsover.current === true && isOverSlider === false) {
-      console.log("Supprimer la carda joutée");
+      // console.log("Supprimer la carda joutée");
+      const cardResult = cards.filter(card => {
+        return !card.isDragging;
+      });
+
+      setcardList(cardResult);
     }
 
     prevIsover.current = isOverSlider;
-  }, [isOverSlider]);
+  }, [isOverSlider, cards]);
 
-  console.log("isOverSlider :", isOverSlider);
+  // console.log("isOverSlider :", isOverSlider);
 
-  console.log(cards);
+  // console.log(cards);
 
   return (
     <div
