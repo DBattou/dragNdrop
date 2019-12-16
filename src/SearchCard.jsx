@@ -1,7 +1,8 @@
 import React from "react";
 import { useDrag } from "react-dnd";
+import "./SearchCard.css";
 
-const Card = ({ label, id }) => {
+const SearchCard = ({ label, id }) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: "card",
@@ -18,17 +19,12 @@ const Card = ({ label, id }) => {
   return (
     <div
       ref={drag}
-      style={{
-        border: "solid 1px black",
-        margin: "20px",
-        height: "20px",
-        width: "100px",
-        opacity: isDragging ? "0.5" : "1"
-      }}
+      className="SearchCard"
+      style={{ opacity: isDragging ? "0.5" : "1" }}
     >
       {label}
     </div>
   );
 };
 
-export default Card;
+export default SearchCard;

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDrop, useDrag } from "react-dnd";
+import "./SortableCard.css";
 
 const SortableCard = ({
   id,
@@ -10,9 +11,11 @@ const SortableCard = ({
   deleteCard,
   cleanFakeCard,
   addFakeCard,
-  isFake
+  isFake,
+  index
 }) => {
   const originalIndex = findCard(id).index;
+  const [hideCard, setHideCard] = useState(false);
 
   const [{ isDragging }, drag] = useDrag({
     item: { type: "card", id, originalIndex, cardFromSearch: false, isFake },
@@ -45,7 +48,7 @@ const SortableCard = ({
     accept: "card",
     canDrop: () => false,
     hover: cardBeingDragged => {
-      console.log("From search : ", cardBeingDragged.cardFromSearch);
+      console.log("Card being dragged : ", cardBeingDragged);
 
       if (cardBeingDragged.cardFromSearch) {
         if (!findCard(cardBeingDragged.id)) {
@@ -66,18 +69,19 @@ const SortableCard = ({
     }
   });
 
+  useEffect(() => {
+    console.log("IDRAGGING A CHANGE, isDragging => ", isDragging);
+    setHideCard(isDragging);
+  }, [isDragging]);
+
+  console.log("isDragging : ", isDragging);
   return (
     <div
+      className={`SortableCard SortableCard-${index}`}
       ref={node => drag(drop(node))}
-      id={id}
+      id={index}
       label={label}
-      style={{
-        border: "solid 1px black",
-        margin: "20px",
-        height: "20px",
-        width: "100px",
-        opacity: isDragging ? "0" : "1"
-      }}
+      style={{ opacity: hideCard ? "0" : "1" }}
     >
       {label}
     </div>

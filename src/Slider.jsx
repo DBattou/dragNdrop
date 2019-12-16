@@ -2,6 +2,8 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import SortableCard from "./SortableCard";
 import { useDrop } from "react-dnd";
 
+import "./Slider.css";
+
 const ITEMS = [
   { id: "10", label: "Bonjour" },
   { id: "11", label: "Hello" },
@@ -120,10 +122,7 @@ const Slider = () => {
   // console.log(cards);
 
   return (
-    <div
-      ref={drop}
-      style={{ border: "2px solid black", margin: "40px", width: "500px" }}
-    >
+    <div ref={drop} className={"Slider"}>
       {cards.map((card, index) => {
         return (
           <SortableCard
