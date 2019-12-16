@@ -22,4 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+<<<<<<< HEAD
+=======
+cypress/video
+>>>>>>> 6940a47... Install cypress testing with trigger()
 cypress/screenshots

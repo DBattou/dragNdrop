@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDrop, useDrag } from "react-dnd";
+import "./SortableCard.css";
 
 const SortableCard = ({
   id,
@@ -10,7 +11,8 @@ const SortableCard = ({
   deleteCard,
   cleanFakeCard,
   addFakeCard,
-  isFake
+  isFake,
+  index
 }) => {
   const originalIndex = findCard(id).index;
 
@@ -68,16 +70,11 @@ const SortableCard = ({
 
   return (
     <div
+      className={`SortableCard SortableCard-${index}`}
       ref={node => drag(drop(node))}
-      id={id}
+      id={index}
       label={label}
-      style={{
-        border: "solid 1px black",
-        margin: "20px",
-        height: "20px",
-        width: "100px",
-        opacity: isDragging ? "0" : "1"
-      }}
+      style={{ opacity: isDragging ? "0" : "1" }}
     >
       {label}
     </div>
